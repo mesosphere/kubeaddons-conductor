@@ -1,0 +1,42 @@
+---
+apiVersion: kubeaddons.mesosphere.io/v1beta1
+kind: Addon
+metadata:
+  name: conductor
+  namespace: conductor
+  labels:
+    kubeaddons.mesosphere.io/name: conductor
+    kubeaddons.mesosphere.io/hack-requires-defaultstorageclass: "true"
+  annotations:
+    catalog.kubeaddons.mesosphere.io/addon-revision: "1.0.0-1"
+
+    appversion.kubeaddons.mesosphere.io/conductor: "1.0.0"
+    endpoint.kubeaddons.mesosphere.io/conductor: /conductor
+    docs.kubeaddons.mesosphere.io/conductor: "https://docs.d2iq.com/ksphere/conductor/"
+spec:
+  requires:
+    - matchLabels:
+        kubeaddons.mesosphere.io/name: cert-manager
+  cloudProvider:
+    - name: aws
+      enabled: false
+    - name: azure
+      enabled: false
+    - name: gcp
+      enabled: false
+    - name: docker
+      enabled: false
+    - name: none
+      enabled: false
+  kubernetes:
+    minSupportedVersion: v1.15.6
+  chartReference:
+    chart: conductor
+    repo: https://mesosphere.github.io/learning-hub-server/charts
+    version: 1.0.0
+    values: |
+      ---
+      subClusters:
+        sshClusters:
+          limit: 10
+
