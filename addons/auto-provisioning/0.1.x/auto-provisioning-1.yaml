@@ -1,0 +1,39 @@
+---
+apiVersion: kubeaddons.mesosphere.io/v1beta1
+kind: Addon
+metadata:
+  name: auto-provisioning
+  namespace: conductor
+  labels:
+    kubeaddons.mesosphere.io/name: auto-provisioning
+  annotations:
+    catalog.kubeaddons.mesosphere.io/addon-revision: "0.1.7-1"
+    appversion.kubeaddons.mesosphere.io/auto-provisioning: "v0.1.7"
+spec:
+  requires:
+    - matchLabels:
+        kubeaddons.mesosphere.io/name: cert-manager
+  cloudProvider:
+    - name: aws
+      enabled: false
+    - name: azure
+      enabled: false
+    - name: gcp
+      enabled: false
+    - name: docker
+      enabled: false
+    - name: none
+      enabled: false
+  kubernetes:
+    minSupportedVersion: v1.15.6
+  chartReference:
+    chart: auto-provisioning
+    repo: https://mesosphere.github.io/yakcl/charts
+    version: v0.1.7
+    values: |
+      ---
+      certManagerCertificates:
+        issuer:
+          name: kubernetes-ca
+          kind: ClusterIssuer
+
